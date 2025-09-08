@@ -3,7 +3,7 @@ import torch
 
 # Define the models to compare
 models = [
-    "mistralai/Mistral-7B-Instruct-v0.1",
+    "microsoft/phi-1",
     "microsoft/phi-2",
     "google/gemma-1.1b-it"
 ]
@@ -17,8 +17,8 @@ prompt = f"Summarize the following news article: {article}"
 # Function to generate response
 def generate_response(model_name, prompt):
     tokenizer = AutoTokenizer.from_pretrained(model_name)
-    model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16, device_map="auto")
-    input_ids = tokenizer.encode(prompt, return_tensors="pt").to(model.device)
+    model = AutoModelForCausalLM.from_pretrained(model_name, dtype=torch.float16, device_map="cpu", max_memory={"cpu": "4GB", "disk": "50GB"})
+    input_ids = tokenizer.encode(prompt, return_tensors="pt").to("cpu")
     output_ids = model.generate(
         input_ids,
         max_length=200,
