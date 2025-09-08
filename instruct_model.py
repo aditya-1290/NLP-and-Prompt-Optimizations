@@ -4,6 +4,7 @@ import torch
 # Load pre-trained Phi-2-Instruct model and tokenizer
 model_name = "microsoft/phi-2"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
+tokenizer.pad_token = tokenizer.eos_token  # Set pad_token to eos_token for padding
 model = AutoModelForCausalLM.from_pretrained(model_name, dtype=torch.float16, device_map="auto")
 
 # Define an instruction
